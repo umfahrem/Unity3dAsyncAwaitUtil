@@ -1,0 +1,40 @@
+name: UPM-Workflow
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  UPM-Release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Get tag version
+      run: |
+        git fetch --all --tags
+        echo ::set-env name=RELEASE_VERSION::$(echo $(git tag -l --sort=v:refname | tail -1))
+    - name: Checkout the tag
+      run: |
+        git checkout tags/$RELEASE_VERSION
+    - name: Cache upm files
+      run: |
+        sudo mkdir -p /temp
+        sudo cp -a ./UnityProject/Assets/Plugins/AsyncAwaitUtil/. /temp
+    - name: Checkout orphan branch
+      run: bash ./.github/orphan-branch.sh upm
+    - name: Create upm commit
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git rm -rf .
+        cp -a /temp/. .
+        git add . --force
+        git commit -m "UPM commit for version ${RELEASE_VERSION}" -a
+        git tag -a "${RELEASE_VERSION#*v}" -m "UPM version ${RELEASE_VERSION#*v}"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: upm
+        tags: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
