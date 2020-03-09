@@ -1,0 +1,13 @@
+{
+    "name": "com.svermeulen.asyncawaitutil",
+    "displayName": "AsyncAwaitUtil",
+    "version": "0.1.3",
+    "unity": "2019.3",
+    "description": "A bunch of code to make using async-await easier in Unity3D.",
+    "author": "Steve Vermeulen <@svermeulen>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/umfahrem/Unity3dAsyncAwaitUtil.git"
+    },
+    "license": "MIT"
+}
