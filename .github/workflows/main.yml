@@ -21,6 +21,7 @@ jobs:
       run: |
         sudo mkdir -p /temp
         sudo cp -a ./UnityProject/Assets/Plugins/AsyncAwaitUtil/. /temp
+        sudo rm -r /temp/UniRx
     - name: Checkout orphan branch
       run: bash ./.github/orphan-branch.sh upm
     - name: Create upm commit
